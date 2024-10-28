@@ -18,6 +18,7 @@ public class TravelController {
 
     @GetMapping("/list")
     public List<TravelEntity> TravelList() {
+        System.out.println("서벼 연결");
         return travelService.findAll();
     }
 

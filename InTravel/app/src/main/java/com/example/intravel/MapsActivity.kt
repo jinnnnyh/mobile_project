@@ -72,6 +72,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var btnPinUpdate: Button
     private lateinit var btnPinRemove: Button
 
+    private val apiKey = System.getenv("GOOGLE_MAPS_API_KEY")
     private var tId: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,7 +80,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // Google Places API 초기화
         if (!Places.isInitialized()) {
-            Places.initialize(applicationContext, "AIzaSyDkoP6r8hnWyrMknlg-3myS0PM5ZSULwfo")
+            Places.initialize(applicationContext, apiKey!!.toString())
         }
 
         // PlacesClient 생성
@@ -298,6 +299,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                         // LatLngBounds.Builder 초기화
                         val builder = LatLngBounds.Builder()
                         Log.d("allData", "${response.body()}")
+
+                        if (markers.isEmpty()) {
+                            Log.e("Error", "No markers found.")
+                            return // 더 이상 진행하지 않음
+                        }
 
                         // 지도에 모든 마커 추가
                         for (marker in markers) {

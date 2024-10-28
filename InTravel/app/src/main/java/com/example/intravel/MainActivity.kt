@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -109,12 +110,12 @@ class MainActivity : AppCompatActivity() {
     Client.retrofit.findComplete('N').enqueue(object:retrofit2.Callback<List<TravelData>>{
       override fun onResponse(call: Call<List<TravelData>>, response: Response<List<TravelData>>) {
         mainAdapter.mainList.clear() // 어댑터에 있는 데이터 지우고 채우기
-        mainAdapter.mainList = response.body() as MutableList<TravelData>
+        mainAdapter.mainList = response?.body() as MutableList<TravelData>
         mainAdapter.notifyDataSetChanged()
       }
 
       override fun onFailure(call: Call<List<TravelData>>, t: Throwable) {
-        TODO("Not yet implemented")
+        Log.d("findComplete","${t.message}")
       }
     })// findComplete
 
