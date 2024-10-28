@@ -80,7 +80,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // Google Places API 초기화
         if (!Places.isInitialized()) {
-            Places.initialize(applicationContext, apiKey!!.toString())
+            Places.initialize(applicationContext, "${apiKey}")
         }
 
         // PlacesClient 생성
