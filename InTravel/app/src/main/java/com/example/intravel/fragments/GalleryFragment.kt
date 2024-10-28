@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -24,6 +25,7 @@ import com.example.intravel.databinding.FragmentGalleryBinding
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -125,6 +127,7 @@ class GalleryFragment : Fragment() {
 
   private fun photoSaveDialog(photoUri: Uri) {
     val builder = AlertDialog.Builder(requireContext())
+
     builder.setTitle("촬영한 사진 업로드")
     builder.setMessage("촬영한 사진을 저장하시겠습니까?")
     builder.setPositiveButton("확인") { dialog, _ ->
@@ -138,40 +141,36 @@ class GalleryFragment : Fragment() {
   }
 
   private fun uploadPhoto(photoUri: Uri) {
-    val photoFile = File(getRealPathFromURI(photoUri))
-    val requestFile = photoFile.asRequestBody("image/jpeg".toMediaTypeOrNull())
-    val body = MultipartBody.Part.createFormData("photo", photoFile.name, requestFile)
 
-    val call = Client.photoRetrofit.savePhoto(tId, body)
-    call.enqueue(object : Callback<PhotoData> {
-      override fun onResponse(call: Call<PhotoData>, response: Response<PhotoData>) {
-        if (response.isSuccessful) {
-          response.body()?.let { newPhoto ->
-            galleryAdapter.photoList.add(newPhoto)
-            galleryAdapter.notifyDataSetChanged()
+    val inputStream = context!!.contentResolver.openInputStream(photoUri)
+    val requestFile = inputStream?.readBytes()?.toRequestBody("image/jpeg".toMediaTypeOrNull())
+
+    Log.d("photoUri","${photoUri}")
+
+    if (requestFile != null) {
+      val body = MultipartBody.Part.createFormData("photo", "photo.jpg", requestFile)
+
+      val call = Client.photoRetrofit.savePhoto(tId, body)
+      call.enqueue(object : Callback<PhotoData> {
+        override fun onResponse(call: Call<PhotoData>, response: Response<PhotoData>) {
+          if (response.isSuccessful) {
+            response.body()?.let { newPhoto ->
+              galleryAdapter.photoList.add(newPhoto)
+              galleryAdapter.notifyDataSetChanged()
+            }
+          } else {
+            // 실패 처리
           }
         }
-        else {
-          // 실패 처리
+
+        override fun onFailure(call: Call<PhotoData>, t: Throwable) {
+          Log.d("uploadPhoto", "${t.message}")
         }
-      }
-
-      override fun onFailure(call: Call<PhotoData>, t: Throwable) {
-        // 에러 처리
-      }
-    })
-  }
-
-  private fun getRealPathFromURI(contentUri: Uri): String {
-    val cursor = requireActivity().contentResolver.query(contentUri, null, null, null, null)
-    cursor?.use {
-      it.moveToFirst()
-      val index = it.getColumnIndex(MediaStore.Images.ImageColumns.DATA)
-      if (index != -1) {
-        return it.getString(index)
-      }
+      })
+    } else {
+      // InputStream을 열 수 없을 때 처리
     }
-    return ""
+
   }
 
   private fun loadPhotoList() {
