@@ -32,7 +32,7 @@
 * 지도 위치 태그
 
 ## :snowman: 어플 이미지
-![깃허브용이미지](https://github.com/user-attachments/assets/ae6fc2f4-9c27-4c10-b86f-cbf1f56ba909)
+![깃허브용이미지](https://github.com/user-attachments/assets/05efdfef-56d4-4e08-a223-bf97a396ee69)
 
 
 ## :snowman: ERD 설계
