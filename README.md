@@ -4,7 +4,7 @@
 ## :snowman: 제작 기간 & 참여 인원
 * 2024.09.03 ~ 2024.09.20
 * 6명 (프론트엔드 3명, 백엔드 2명, 문서 작업 1명)
-  
+
 ## :snowman: 활용 기술
 ### Back-end
 * Java17
@@ -30,6 +30,9 @@
 * 예산 관리 가계부
 * 사진 촬영 및 저장
 * 지도 위치 태그
+
+## :snowman: [시연 영상](https://youtu.be/zThjG9X4Mrw)
+> 
 
 ## :snowman: 어플 이미지
 ![깃허브용이미지](https://github.com/user-attachments/assets/05efdfef-56d4-4e08-a223-bf97a396ee69)
