@@ -12,7 +12,6 @@
 * MySQL
 * JPA
 * Tomcat
-* Gradle
 * AWS(배포)
 ### Front-end
 * Kotlin
